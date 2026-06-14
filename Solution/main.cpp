@@ -33,13 +33,34 @@ void sortMatches(Match *arr, int count)
 // (Assign nullptr to pointers, false to is_end_of_word, etc...)
 TrieNode *createNode(char c)
 {
-    return nullptr;
+    TrieNode *newNode = new TrieNode{c, false, 0, nullptr, nullptr, nullptr};
+    return newNode;
 }
 
 // TODO 3: Traverse the tree and free memory (delete) to prevent Memory Leak
 void freeTrie(TrieNode *root)
 {
     // Write memory deallocation code here...
+}
+
+// ==========================================
+// findChild function
+// ==========================================
+TrieNode *findChild(TrieNode *node, char c)
+{
+    if (node == nullptr)
+        return nullptr;
+
+    TrieNode *child = node->first_child;
+
+    while (child != nullptr)
+    {
+        if (child->character == c)
+            return child;
+
+        child = child->next_sibling;
+    }
+    return nullptr;
 }
 
 // ==========================================
@@ -50,6 +71,38 @@ void freeTrie(TrieNode *root)
 void insertWord(TrieNode *root, const string &word)
 {
     // Write insert code here...
+    TrieNode *cur = root;
+    for (char c : word)
+    {
+        TrieNode *child = findChild(cur, c);
+
+        // chưa có node mang ký tự c
+        if (child == nullptr)
+        {
+            child = createNode(c);
+
+            // nếu cur chưa có con nào
+            if (cur->first_child == nullptr)
+            {
+                cur->first_child = child;
+            }
+            else
+            {
+                // thêm vào cuối danh sách sibling
+                TrieNode *run = cur->first_child;
+
+                while (run->next_sibling != nullptr)
+                {
+                    run = run->next_sibling;
+                }
+
+                run->next_sibling = child;
+            }
+        }
+        cur = child;
+    }
+    cur->is_end_of_word = true;
+    cur->word_length = word.length();
 }
 
 // TODO 5: Use Queue (std::queue) to traverse BFS and compute fail_link pointers

@@ -65,3 +65,55 @@ Nhận xét:
 - Trả về đúng 10 pattern.
 - Không trùng với 10 dòng đầu tiên của từ điển.
 - Cùng seed cho cùng kết quả.
+
+# Day3
+
+## Code cac ham createNode, findChild, insertWord
+
+- Hoàn thành các hàm yêu cầu
+- lưu word_length ở node kết thúc
+
+## Kiểm thử các hàm đã code
+
+- Thực hiện:
+
+```cpp
+  void printTrie(TrieNode* node, int depth = 0)
+  {
+      if (node == nullptr)
+          return;
+
+      for (int i = 0; i < depth; i++)
+          cout << "  ";
+
+      cout << node->character;
+
+      if (node->is_end_of_word)
+          cout << " (" << node->word_length << ")";
+
+      cout << endl;
+
+      printTrie(node->first_child, depth + 1);
+      printTrie(node->next_sibling, depth);
+  }
+
+  // trong hàm main
+  TrieNode* root = createNode('/');
+  insertWord(root, "abc");
+  insertWord(root, "abd");
+  insertWord(root, "abe");
+  printTrie(root);
+
+```
+
+- Kết quả:
+
+```text
+  /
+  a
+    b
+      c (3)
+      d (3)
+      e (3)
+      
+```

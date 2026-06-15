@@ -20,9 +20,61 @@ using namespace std::chrono;
 // Requirement: Sort the Match array prioritizing ascending 'start'.
 // If 'start' are equal, prioritize descending 'end'.
 // Strictly DO NOT use the <algorithm> library (std::sort).
+
+bool compare(const Match &a, const Match &b)
+{
+    if (a.start != b.start)
+        return a.start < b.start;
+
+    return a.end > b.end;
+}
+
+void merge(Match *arr, int left, int mid, int right)
+{
+    int size = right - left + 1;
+    Match *temp = new Match[size];
+
+    int i = left, j = mid + 1, index = 0;
+
+    while (i <= mid && j <= right)
+    {
+        if (compare(arr[i], arr[j]))
+            temp[index++] = arr[i++];
+        else
+            temp[index++] = arr[j++];
+    }
+
+    while (i <= mid)
+        temp[index++] = arr[i++];
+
+    while (j <= right)
+        temp[index++] = arr[j++];
+
+    for (int t = 0; t < size; t++)
+        arr[left + t] = temp[t];
+
+    delete[] temp;
+}
+
+void mergeSort(Match *arr, int left, int right)
+{
+    if (left >= right)
+        return;
+
+    int mid = left + (right - left) / 2;
+
+    mergeSort(arr, left, mid);
+    mergeSort(arr, mid + 1, right);
+
+    merge(arr, left, mid, right);
+}
+
 void sortMatches(Match *arr, int count)
 {
     // Write sorting code here...
+    if (arr == nullptr || count <= 1)
+        return;
+    mergeSort(arr, 0, count - 1);
 }
 
 // ==========================================
@@ -41,6 +93,13 @@ TrieNode *createNode(char c)
 void freeTrie(TrieNode *root)
 {
     // Write memory deallocation code here...
+    if (root == nullptr)
+        return;
+
+    freeTrie(root->first_child);
+    freeTrie(root->next_sibling);
+
+    delete root;
 }
 
 // ==========================================
@@ -157,7 +216,7 @@ void ahoCorasickSearch(TrieNode *root, string &text)
 // measure execution time (chrono), and run the Benchmark loop to collect data for the report!
 int main()
 {
-    cout << "--- NLP PREPROCESSING SYSTEM ---" << endl;
+    cout << "--- NLP PREPROCEScSING SYSTEM ---" << endl;
 
     // 1. Read the dictionary
     vector<string> dictionary;

@@ -115,5 +115,50 @@ Nhận xét:
       c (3)
       d (3)
       e (3)
-      
+
+```
+
+# Day4
+
+## Code cac ham freeTrie, sortMatches
+
+- Hoàn thành các hàm theo yêu cầu
+- Sort Matches đúng phương pháp start tăng, end giảm
+
+## Kiểm thử hàm sortMatches
+
+- Thực hiện
+
+```cpp
+
+  Match arr[] =
+  {
+      {10, 15},
+      {5, 8},
+      {10, 20},
+      {5, 12},
+      {3, 4}
+  };
+
+  int count = 5;
+
+  sortMatches(arr, count);
+
+  for (int i = 0; i < count; i++)
+  {
+      cout << arr[i].start << " " << arr[i].end << "\n";
+  }
+
+```
+
+- Kết quả
+
+```text
+
+3 4
+5 12
+5 8
+10 20
+10 15
+
 ```

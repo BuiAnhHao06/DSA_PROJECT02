@@ -181,6 +181,33 @@ void buildFailureLinks(TrieNode *root)
 void naiveSearch(const vector<string> &dict, string &text)
 {
     // Write naive search code here...
+    for (const string &pattern : dict)
+    {
+        int m = pattern.length();
+        int n = text.length();
+
+        for (int i = 0; i <= n - m; i++)
+        {
+            bool match = true;
+
+            for (int j = 0; j < m; j++)
+            {
+                if (text[i + j] != pattern[j])
+                {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    text[i + j] = '*';
+                }
+            }
+        }
+    }
 }
 
 // TODO 7: Traverse the text using the Trie. Need to implement backtracking logic

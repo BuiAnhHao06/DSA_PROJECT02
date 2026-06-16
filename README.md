@@ -162,3 +162,41 @@ Nhận xét:
 10 15
 
 ```
+
+# Day5
+
+## Code ham naiveSearch theo yeu cau
+
+## Kiem thu ham
+
+```text
+*
+Input:
+hello world
+
+Pattern:
+world
+
+Output:
+hello *****
+
+*
+Input:
+I love ice cream
+
+Pattern:
+ice cream
+
+Output:
+I love *********
+
+*
+Input:
+cat dog cat cat
+
+Pattern:
+cat
+
+Output:
+*** dog *** ***
+```

@@ -215,6 +215,28 @@ void naiveSearch(const vector<string> &dict, string &text)
 void trieSearch(TrieNode *root, string &text)
 {
     // Write Trie search code here...
+    int n = text.length();
+    for (int i = 0; i < n; i++)
+    {
+        TrieNode *cur = root;
+
+        for (int j = i; j < n; j++)
+        {
+            TrieNode *child = findChild(cur, text[j]);
+
+            if (child == nullptr)
+                break;
+
+            cur = child;
+            if (cur->is_end_of_word)
+            {
+                for (int k = i; k <= j; k++)
+                {
+                    text[k] = '*';
+                }
+            }
+        }
+    }
 }
 
 // TODO 8: Traverse the text using an optimized Trie with Maximal Munch (Greedy).

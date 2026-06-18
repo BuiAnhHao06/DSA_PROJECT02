@@ -244,6 +244,36 @@ void trieSearch(TrieNode *root, string &text)
 void trieMaximalMunchSearch(TrieNode *root, string &text)
 {
     // Write Maximal Munch search code here...
+    int n = text.length();
+
+    for (int i = 0; i < n; i++)
+    {
+        TrieNode *cur = root;
+
+        int longestEnd = -1;
+
+        for (int j = i; j < n; j++)
+        {
+            TrieNode *child = findChild(cur, text[j]);
+
+            if (child == nullptr)
+                break;
+
+            cur = child;
+
+            if (cur->is_end_of_word)
+                longestEnd = j;
+        }
+
+        if (longestEnd != -1)
+        {
+            for (int k = i; k <= longestEnd; k++)
+            {
+                text[k] = '*';
+            }
+            i = longestEnd;
+        }
+    }
 }
 
 // TODO 9: Traverse the text using an Automaton (no backtracking).

@@ -171,6 +171,48 @@ void insertWord(TrieNode *root, const string &word)
 void buildFailureLinks(TrieNode *root)
 {
     // Write failure link building code here...
+    if (root == nullptr)
+        return;
+
+    root->fail_link = root;
+
+    queue<TrieNode *> q;
+
+    TrieNode *child = root->first_child;
+
+    while (child != nullptr)
+    {
+        child->fail_link = root;
+        q.push(child);
+        child = child->next_sibling;
+    }
+
+    while (!q.empty())
+    {
+        TrieNode *current = q.front();
+        q.pop();
+        TrieNode *child = current->first_child;
+
+        while (child != nullptr)
+        {
+            char c = child->character;
+
+            TrieNode *failNode = current->fail_link;
+
+            while (failNode != root && findChild(failNode, c) == nullptr)
+                failNode = failNode->fail_link;
+
+            TrieNode *target = findChild(failNode, c);
+
+            if (target != nullptr && target != child)
+                child->fail_link = target;
+            else
+                child->fail_link = root;
+
+            q.push(child);
+            child = child->next_sibling;
+        }
+    }
 }
 
 // ==========================================

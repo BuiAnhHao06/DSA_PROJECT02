@@ -328,6 +328,66 @@ void trieMaximalMunchSearch(TrieNode *root, string &text)
 void ahoCorasickSearch(TrieNode *root, string &text)
 {
     // Write Aho-Corasick search code here...
+    const int MAX_MATCHES = 100000;
+
+    Match *matches = new Match[MAX_MATCHES];
+    int matchCount = 0;
+
+    TrieNode *current = root;
+
+    int n = text.length();
+
+    for (int i = 0; i < n; i++)
+    {
+        char c = text[i];
+
+        while (current != root && findChild(current, c) == nullptr)
+            current = current->fail_link;
+
+        TrieNode *next = findChild(current, c);
+
+        if (next != nullptr)
+            current = next;
+        else
+            current = root;
+
+        TrieNode *temp = current;
+
+        while (temp != root)
+        {
+            if (temp->is_end_of_word)
+            {
+                int start = i - temp->word_length + 1;
+                int end = i;
+
+                if (matchCount < MAX_MATCHES)
+                {
+                    matches[matchCount].start = start;
+                    matches[matchCount].end = end;
+                    matchCount++;
+                }
+            }
+
+            temp = temp->fail_link;
+        }
+    }
+
+    sortMatches(matches, matchCount);
+
+    int last_end = -1;
+
+    for (int i = 0; i < matchCount; i++)
+    {
+        if (matches[i].start > last_end)
+        {
+            for (int j = matches[i].start; j <= matches[i].end; j++)
+                text[j] = '*';
+
+            last_end = matches[i].end;
+        }
+    }
+
+    delete[] matches;
 }
 
 // ==========================================

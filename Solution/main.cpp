@@ -391,6 +391,23 @@ void ahoCorasickSearch(TrieNode *root, string &text)
 }
 
 // ==========================================
+//      BUILD TRIEFROMDICT
+// ==========================================
+TrieNode *buildTrieFromDict(const vector<string> &dict)
+{
+    TrieNode *root = createNode('/');
+
+    for (const string &word : dict)
+    {
+        insertWord(root, word);
+    }
+
+    buildFailureLinks(root);
+
+    return root;
+}
+
+// ==========================================
 // 5. BASIC MAIN FUNCTION (FOR DEBUGGING)
 // ==========================================
 // NOTE: Students must write additional functions to load files, perform random sampling,
@@ -420,19 +437,63 @@ int main()
     string text = "nhieu san pham cong nghe khung tai asus expo 2012 to chuc doc lap";
     cout << "\nOriginal text: " << text << endl;
 
-    // 3. Test Trie & Aho-Corasick
-    TrieNode *root = createNode('/');
+    // // 3. Test Trie & Aho-Corasick
+    // TrieNode *root = createNode('/');
 
-    // (Students can test by calling these functions after implementation)
-    // for (const string& w : dictionary) insertWord(root, w);
-    // buildFailureLinks(root);
-    // ahoCorasickSearch(root, text);
+    // // (Students can test by calling these functions after implementation)
+    // // for (const string& w : dictionary) insertWord(root, w);
+    // // buildFailureLinks(root);
+    // // ahoCorasickSearch(root, text);
 
-    // cout << "Result: " << text << endl;
+    // // cout << "Result: " << text << endl;
 
-    if (root)
-    {
-        freeTrie(root);
-    }
+    // if (root)
+    // {
+    //     freeTrie(root);
+    // }
+    // return 0;
+
+    // ==============================================
+    // Comment doan tren, code them doan nay test day10
+    // ==============================================
+    string textt =
+        "Trong buoi thao luan gan day, nhieu nguoi nhac den hap dan truyen "
+        "nhu mot cach tiep can thong tin de hieu va de nho hon. "
+        "Tuy nhien, mot so y kien cho rang hap khien nhieu nguoi "
+        "tap trung vao hinh thuc hon la noi dung thuc su.";
+
+    // 3. Build Trie + Failure Links
+    TrieNode *root = buildTrieFromDict(dictionary);
+
+    // 4. Create independent copies (anti-mutation)
+    string naiveText = textt;
+    string trieText = textt;
+    string maximalText = textt;
+    string ahoText = textt;
+
+    // 5. Run 4 search engines
+    naiveSearch(dictionary, naiveText);
+
+    trieSearch(root, trieText);
+
+    trieMaximalMunchSearch(root, maximalText);
+
+    ahoCorasickSearch(root, ahoText);
+
+    cout << "\n===== RESULTS =====\n";
+
+    cout << "\nNaive Search:\n";
+    cout << naiveText << endl;
+
+    cout << "\nTrie Search:\n";
+    cout << trieText << endl;
+
+    cout << "\nTrie Maximal Munch Search:\n";
+    cout << maximalText << endl;
+
+    cout << "\nAho-Corasick Search:\n";
+    cout << ahoText << endl;
+
+    freeTrie(root);
     return 0;
 }

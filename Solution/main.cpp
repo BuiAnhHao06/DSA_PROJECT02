@@ -407,6 +407,42 @@ TrieNode *buildTrieFromDict(const vector<string> &dict)
     return root;
 }
 
+// =========================================
+//     BENCHMARK FRAMEWORK
+// =========================================
+
+// Benchmark cho Naive
+double measureNaive(const vector<string> &dict, const string &originalText, int repeat = 100)
+{
+    double totalTime = 0.0;
+    for (int i = 0; i < repeat; i++)
+    {
+        string text = originalText;
+        auto start = high_resolution_clock::now();
+        naiveSearch(dict, text);
+        auto end = high_resolution_clock::now();
+        totalTime += duration<double, milli>(end - start).count();
+    }
+
+    return totalTime / repeat;
+}
+
+// Benchmark cho Trie/Maximal/Aho
+double measureSearch(void (*searchFunc)(TrieNode *, string &), TrieNode *root, const string &originalText, int repeat = 100)
+{
+    double totalTime = 0.0;
+    for (int i = 0; i < repeat; i++)
+    {
+        string text = originalText;
+        auto start = high_resolution_clock::now();
+        searchFunc(root, text);
+        auto end = high_resolution_clock::now();
+        totalTime += duration<double, milli>(end - start).count();
+    }
+
+    return totalTime / repeat;
+}
+
 // ==========================================
 // 5. BASIC MAIN FUNCTION (FOR DEBUGGING)
 // ==========================================
@@ -493,6 +529,18 @@ int main()
 
     cout << "\nAho-Corasick Search:\n";
     cout << ahoText << endl;
+
+    cout << "\n========== BENCHMARK ==========\n";
+
+    double naiveTime = measureNaive(dictionary, text);
+    double trieTime = measureSearch(trieSearch, root, text);
+    double maximalTime = measureSearch(trieMaximalMunchSearch, root, text);
+    double ahoTime = measureSearch(ahoCorasickSearch, root, text);
+
+    cout << "Naive Search          : " << naiveTime << " ms\n";
+    cout << "Trie Search           : " << trieTime << " ms\n";
+    cout << "Trie Maximal Munch    : " << maximalTime << " ms\n";
+    cout << "Aho-Corasick Search   : " << ahoTime << " ms\n";
 
     freeTrie(root);
     return 0;
